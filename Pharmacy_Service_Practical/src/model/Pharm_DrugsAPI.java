@@ -51,7 +51,7 @@ public class Pharm_DrugsAPI extends HttpServlet {
 
 		String output = drugObj.insertDrugs(request.getParameter("drugName"), request.getParameter("quantity"),
 				request.getParameter("strength"), request.getParameter("ExpireDate"), request.getParameter("UnitPrice"),
-				request.getParameter("typeID"), request.getParameter("categoryID"));
+				request.getParameter("typeName"), request.getParameter("categoryName"));
 		
 		response.getWriter().write(output);
 	}
@@ -67,7 +67,7 @@ public class Pharm_DrugsAPI extends HttpServlet {
 
 		String output = drugObj.updateDrugs(paras.get("hidDrugIDSave").toString(), paras.get("drugName").toString(),
 				paras.get("quantity").toString(), paras.get("strength").toString(), paras.get("ExpireDate").toString(),
-				paras.get("UnitPrice").toString(), paras.get("typeID").toString(), paras.get("categoryID").toString());
+				paras.get("UnitPrice").toString(), paras.get("typeName").toString(), paras.get("categoryName").toString());
 
 		response.getWriter().write(output);
 	}

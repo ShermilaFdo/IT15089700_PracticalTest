@@ -43,12 +43,12 @@ public class Pharm_DrugService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String insertDrugs(@FormParam("drugName") String drugName, @FormParam("quantity") Integer quantity,
+	public String insertDrugs(@FormParam("drugName") String drugName, @FormParam("quantity") String quantity,
 			@FormParam("strength") String strength, @FormParam("ExpireDate") String ExpireDate,
-			@FormParam("UnitPrice") Double UnitPrice, @FormParam("typeID") Integer typeID,
-			@FormParam("categoryID") Integer categoryID) {
+			@FormParam("UnitPrice") String UnitPrice, @FormParam("typeName") String typeName,
+			@FormParam("categoryName") String categoryName) {
 
-		String output = drugObj.insertDrugs(drugName, quantity, strength, ExpireDate, UnitPrice, typeID, categoryID);
+		String output = drugObj.insertDrugs(drugName, quantity, strength, ExpireDate, UnitPrice, typeName, categoryName);
 		return output;
 	}
 
@@ -63,17 +63,17 @@ public class Pharm_DrugService {
 		JsonObject drugObject = new JsonParser().parse(drugData).getAsJsonObject();
 
 		// Read the values from the JSON object
-		Integer drugID = drugObject.get("drugID").getAsInt();
+		String drugID = drugObject.get("drugID").getAsString();
 		String drugName = drugObject.get("drugName").getAsString();
-		Integer quantity = drugObject.get("quantity").getAsInt();
+		String quantity = drugObject.get("quantity").getAsString();
 		String strength = drugObject.get("strength").getAsString();
 		String ExpireDate = drugObject.get("ExpireDate").getAsString();
-		Double UnitPrice = drugObject.get("UnitPrice").getAsDouble();
-		Integer typeID = drugObject.get("typeID").getAsInt();
-		Integer categoryID = drugObject.get("categoryID").getAsInt();
+		String UnitPrice = drugObject.get("UnitPrice").getAsString();
+		String typeName = drugObject.get("typeName").getAsString();
+		String categoryName = drugObject.get("categoryName").getAsString();
 
-		String output = drugObj.updateDrugs(drugID, drugName, quantity, strength, ExpireDate, UnitPrice, typeID,
-				categoryID);
+		String output = drugObj.updateDrugs(drugID, drugName, quantity, strength, ExpireDate, UnitPrice, typeName,
+				categoryName);
 		return output;
 	}
 
@@ -86,7 +86,7 @@ public class Pharm_DrugService {
 	public String deleteDrugs(String drugData) {
 		JsonObject drugObject = new JsonParser().parse(drugData).getAsJsonObject();
 
-		Integer drugID = drugObject.get("drugID").getAsInt();
+		String drugID = drugObject.get("drugID").getAsString();
 
 		String output = drugObj.deleteDrugs(drugID);
 		return output;

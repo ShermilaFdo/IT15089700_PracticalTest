@@ -11,7 +11,7 @@ public class Pharm_Drug {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
-			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/pharmacy_db", "root", "");
+			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/pharmacy_service_db", "root", "");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -21,7 +21,7 @@ public class Pharm_Drug {
 
 	/////////////// Insert New Drugs - Pharmacist ////////////////
 	public String insertDrugs(String name, String quantity, String strength, String expiredate, String unitprice,
-			String typeid, String categoryid) {
+			String typename, String categoryname) {
 		String output = "";
 
 		try {
@@ -30,7 +30,7 @@ public class Pharm_Drug {
 				return "Error while connecting to the database for inserting.";
 			}
 
-			String query = " insert into drugs(`drugID`, `drugName`,`quantity`,`strength`,`ExpireDate`,`UnitPrice`,`typeID`,`categoryID`)"
+			String query = " insert into drugs(`drugID`, `drugName`,`quantity`,`strength`,`ExpireDate`,`UnitPrice`,`typeName`,`categoryName`)"
 					+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
@@ -41,8 +41,8 @@ public class Pharm_Drug {
 			preparedStmt.setString(4, strength);			
 			preparedStmt.setDate(5, java.sql.Date.valueOf(expiredate));
 			preparedStmt.setDouble(6, Double.parseDouble(unitprice));			
-			preparedStmt.setInt(7, Integer.parseInt(typeid));
-			preparedStmt.setInt(8, Integer.parseInt(categoryid));
+			preparedStmt.setString(7, typename);
+			preparedStmt.setString(8, categoryname);
 
 			// execute the statement
 			preparedStmt.execute();
@@ -71,7 +71,7 @@ public class Pharm_Drug {
 
 			output = "<table border='1'><tr><th>Drug Name</th><th>Available Quantity</th><th>Strength</th><th>Expire Date</th><th>Unit Price</th><th>Type Name</th><th>Category Name</th><th>Update</th><th>Remove</th></tr>";
 
-			String query = "select d.drugID, d.drugName, d.quantity, d.strength, d.ExpireDate, d.UnitPrice, t.typeName, c.categoryName from drugs d, type t, category c where t.typeID=d.typeID and c.categoryID=d.categoryID order by d.drugID";
+			String query = "select * from drugs order by drugID";
 
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
@@ -111,7 +111,7 @@ public class Pharm_Drug {
 
 	/////////////// Update Drug Details - Pharmacist ////////////////
 	public String updateDrugs(String ID, String name, String quantity, String strength, String expiredate,
-			String unitprice, String typeid, String categoryid) {
+			String unitprice, String typename, String categoryname) {
 		
 		String output = "";
 
@@ -121,7 +121,7 @@ public class Pharm_Drug {
 				return "Error while connecting to the database for updating.";
 			}
 
-			String query = "UPDATE drugs SET drugName=?,quantity=?,strength=?,ExpireDate=?, UnitPrice=?, typeID=?, categoryID=? WHERE drugID=?";
+			String query = "UPDATE drugs SET drugName=?,quantity=?,strength=?,ExpireDate=?, UnitPrice=?, typeName=?, categoryName=? WHERE drugID=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 			// binding values
@@ -130,8 +130,8 @@ public class Pharm_Drug {
 			preparedStmt.setString(3, strength);
 			preparedStmt.setDate(4, java.sql.Date.valueOf(expiredate));			
 			preparedStmt.setDouble(5, Double.parseDouble(unitprice));			
-			preparedStmt.setInt(6, Integer.parseInt(typeid));
-			preparedStmt.setInt(7, Integer.parseInt(categoryid));
+			preparedStmt.setString(6, typename);
+			preparedStmt.setString(7, categoryname);
 			preparedStmt.setInt(8, Integer.parseInt(ID));
 
 			// execute the statement
