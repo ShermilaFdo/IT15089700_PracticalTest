@@ -30,7 +30,7 @@ public class Pharm_Drug {
 				return "Error while connecting to the database for inserting.";
 			}
 
-			String query = " insert into drugs(`drugID`, `drugName`,`quantity`,`strength`,`ExpireDate`,`UnitPrice`,`typeName`,`categoryName`)"
+			String query = " insert into pharmacy_service_db.drugs(`drugID`, `drugName`,`quantity`,`strength`,`ExpireDate`,`UnitPrice`,`typeName`,`categoryName`)"
 					+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 

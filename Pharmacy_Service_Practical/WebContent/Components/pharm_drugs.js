@@ -13,7 +13,7 @@ $(document).on("click", "#btnSave", function(event) {
 	$("#alertError").hide();
 
 	// Form validation-------------------
-	var status = validateItemForm();
+	var status = validateDrugForm();
 	if (status != true) {
 		$("#alertError").text(status);
 		$("#alertError").show();
@@ -106,20 +106,27 @@ $(document).on(
 			$("#strength").val($(this).closest("tr").find('td:eq(2)').text());
 			$("#ExpireDate").val($(this).closest("tr").find('td:eq(3)').text());
 			$("#UnitPrice").val($(this).closest("tr").find('td:eq(4)').text());
-			$("#typeName").val($(this).closest("tr").find('td:eq(5)').text());
+			$("#typeName").val($(this).closest("tr").find('td:eq(5)').text());			
 			$("#categoryName").val($(this).closest("tr").find('td:eq(6)').text());
 		});
 
 // CLIENTMODEL=========================================================================
-function validateItemForm() {
+function validateDrugForm() {
 	// Drug Name
 	if ($("#drugName").val().trim() == "") {
 		return "Insert Drug Name.";
 	}
-	// Quantity
+	
+	// Quantity-----------------------------
 	if ($("#quantity").val().trim() == "") {
 		return "Insert Drug Quantity.";
 	}
+	// is numerical value
+	var tmpQuantity = $("#quantity").val().trim();
+	if (!$.isNumeric(tmpQuantity)) {
+		return "Insert a numerical value for Drug Quantity.";
+	}
+	
 	// Strength
 	if ($("#strength").val().trim() == "") {
 		return "Insert Drug Strength.";
@@ -128,6 +135,7 @@ function validateItemForm() {
 	if ($("#ExpireDate").val().trim() == "") {
 		return "Insert Expire Date.";
 	}	
+	
 	// Unit PRICE-------------------------------
 	if ($("#UnitPrice").val().trim() == "") {
 		return "Insert Unit Price.";
@@ -140,12 +148,13 @@ function validateItemForm() {
 	// convert to decimal price
 	$("#UnitPrice").val(parseFloat(tmpPrice).toFixed(2));
 	
-	// Type ID
-	if ($("#typeName").val().trim() == "") {
+	// Type Name
+	if ($("#typeName").val() == "0") {
 		return "Select Type Name.";
 	}
-	// Category ID
-	if ($("#categoryName").val().trim() == "") {
+	
+	// Category Name
+	if ($("#categoryName").val() == "0") {
 		return "Select Category Name.";
 	}
 	return true;
