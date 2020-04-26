@@ -20,8 +20,8 @@ public class Pharm_Drug {
 	}
 
 	/////////////// Insert New Drugs - Pharmacist ////////////////
-	public String insertDrugs(String name, Integer quantity, String strength, String expiredate, Double unitprice,
-			Integer typeid, Integer categoryid) {
+	public String insertDrugs(String name, String quantity, String strength, String expiredate, String unitprice,
+			String typeid, String categoryid) {
 		String output = "";
 
 		try {
@@ -37,21 +37,23 @@ public class Pharm_Drug {
 			// binding values
 			preparedStmt.setInt(1, 0);
 			preparedStmt.setString(2, name);
-			preparedStmt.setInt(3, quantity);
-			preparedStmt.setString(4, strength);
+			preparedStmt.setInt(3, Integer.parseInt(quantity));			
+			preparedStmt.setString(4, strength);			
 			preparedStmt.setDate(5, java.sql.Date.valueOf(expiredate));
-			preparedStmt.setDouble(6, unitprice);
-			preparedStmt.setInt(7, typeid);
-			preparedStmt.setInt(8, categoryid);
+			preparedStmt.setDouble(6, Double.parseDouble(unitprice));			
+			preparedStmt.setInt(7, Integer.parseInt(typeid));
+			preparedStmt.setInt(8, Integer.parseInt(categoryid));
 
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
-			output = "Successfully Inserted Drug Details!";
+			
+			String newDrugs = readDrugs();
+			output = "{\"status\":\"success\", \"data\": \"" + newDrugs + "\"}";
 		}
 
 		catch (Exception e) {
-			output = "Error while inserting the drug details!";
+			output = "{\"status\":\"error\", \"data\": \"Error while inserting the drug.\"}";
 			System.err.println(e.getMessage());
 		}
 		return output;
@@ -60,7 +62,6 @@ public class Pharm_Drug {
 	/////////////// Read Drug Details - Pharmacist ////////////////
 	public String readDrugs() {
 		String output = "";
-		JSONObject json = new JSONObject();
 
 		try {
 			Connection con = connect();
@@ -68,12 +69,13 @@ public class Pharm_Drug {
 				return "Error while connecting to the database for reading.";
 			}
 
+			output = "<table border='1'><tr><th>Drug Name</th><th>Available Quantity</th><th>Strength</th><th>Expire Date</th><th>Unit Price</th><th>Type Name</th><th>Category Name</th><th>Update</th><th>Remove</th></tr>";
+
 			String query = "select d.drugID, d.drugName, d.quantity, d.strength, d.ExpireDate, d.UnitPrice, t.typeName, c.categoryName from drugs d, type t, category c where t.typeID=d.typeID and c.categoryID=d.categoryID order by d.drugID";
 
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 
-			JSONArray array = new JSONArray();
 			// iterate through the rows in the result set
 			while (rs.next()) {
 				String drugID = Integer.toString(rs.getInt("drugID"));
@@ -85,33 +87,32 @@ public class Pharm_Drug {
 				String typeName = rs.getString("typeName");
 				String categoryName = rs.getString("categoryName");
 
-				JSONObject drug = new JSONObject();
-
-				drug.put("drugID", drugID);
-				drug.put("drugName", drugName);
-				drug.put("quantity", quantity);
-				drug.put("strength", strength);
-				drug.put("ExpireDate", ExpireDate);
-				drug.put("UnitPrice", UnitPrice);
-				drug.put("typeName", typeName);
-				drug.put("categoryName", categoryName);
-				array.put(drug);
+				output += "<tr><td><input id='hidDrugIDUpdate' name='hidDrugIDUpdate' type='hidden' value='" + drugID + "'>" + drugName + "</td>";		
+				output += "<td>" + quantity + "</td>";
+				output += "<td>" + strength + "</td>";
+				output += "<td>" + ExpireDate + "</td>";
+				output += "<td>" + UnitPrice + "</td>";
+				output += "<td>" + typeName + "</td>";
+				output += "<td>" + categoryName + "</td>";
+				
+				output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'></td>"
+						+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger' data-drugid='" + drugID + "'>" + "</td></tr>";
 			}
-
-			json.put("List", array);
 			con.close();
+			// Complete the html table
+			output += "</table>";
 
 		} catch (Exception e) {
 			output = "Error while reading the drug details!";
 			System.err.println(e.getMessage());
 		}
-		output = json.toString();
 		return output;
 	}
 
 	/////////////// Update Drug Details - Pharmacist ////////////////
-	public String updateDrugs(Integer ID, String name, Integer quantity, String strength, String expiredate,
-			Double unitprice, Integer typeid, Integer categoryid) {
+	public String updateDrugs(String ID, String name, String quantity, String strength, String expiredate,
+			String unitprice, String typeid, String categoryid) {
+		
 		String output = "";
 
 		try {
@@ -125,29 +126,32 @@ public class Pharm_Drug {
 
 			// binding values
 			preparedStmt.setString(1, name);
-			preparedStmt.setInt(2, quantity);
+			preparedStmt.setInt(2, Integer.parseInt(quantity));
 			preparedStmt.setString(3, strength);
-			preparedStmt.setDate(4, java.sql.Date.valueOf(expiredate));
-			preparedStmt.setDouble(5, unitprice);
-			preparedStmt.setInt(6, typeid);
-			preparedStmt.setInt(7, categoryid);
-			preparedStmt.setInt(8, ID);
+			preparedStmt.setDate(4, java.sql.Date.valueOf(expiredate));			
+			preparedStmt.setDouble(5, Double.parseDouble(unitprice));			
+			preparedStmt.setInt(6, Integer.parseInt(typeid));
+			preparedStmt.setInt(7, Integer.parseInt(categoryid));
+			preparedStmt.setInt(8, Integer.parseInt(ID));
 
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
-			output = "Updated successfully";
+			
+			String newDrugs = readDrugs();
+			output = "{\"status\":\"success\", \"data\": \"" + newDrugs + "\"}";
 
 		} catch (Exception e) {
-			output = "Error while updating the drug details!";
+			output = "{\"status\":\"error\", \"data\": \"Error while updating the drug.\"}";
 			System.err.println(e.getMessage());
 		}
 		return output;
 	}
 
 	/////////////// Delete Drug Details - Pharmacist ////////////////
-	public String deleteDrugs(Integer ID) {
+	public String deleteDrugs(String ID) {
 		String output = "";
+		
 		try {
 			Connection con = connect();
 			if (con == null) {
@@ -159,15 +163,17 @@ public class Pharm_Drug {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 			// binding values
-			preparedStmt.setInt(1, ID);
+			preparedStmt.setInt(1, Integer.parseInt(ID));
 
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
-			output = "Deleted successfully";
+			
+			String newDrugs = readDrugs();
+			output = "{\"status\":\"success\", \"data\": \"" + newDrugs + "\"}";
 
 		} catch (Exception e) {
-			output = "Error while deleting the drug.";
+			output = "{\"status\":\"error\", \"data\": \"Error while deleting the drug.\"}";
 			System.err.println(e.getMessage());
 		}
 		return output;
