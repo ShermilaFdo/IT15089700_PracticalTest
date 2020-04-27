@@ -2,6 +2,39 @@ $(document).ready(function() {
 
 	$("#alertSuccess").hide();
 	$("#alertError").hide();
+
+	// This helps to show Calendar/datepicker in all browsers.
+	// Because some browsers won't show calendar/datepicker
+	// Also, Format date as YY-MM-DD
+	webshims.setOptions('forms-ext', {
+		types : 'date'
+	});
+	webshims.polyfill('forms forms-ext');
+	$.webshims.formcfg = {
+		en : {
+			dFormat : '-',
+			dateSigns : '-',
+			patterns : {
+				d : "yy-mm-dd"
+			}
+		}
+	};
+
+	// Expire date should not be an old date.
+	// Therefore only allow from current date to select from calendar
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth() + 1; // Month count from 0 to 11
+	var yyyy = today.getFullYear();
+	if (dd < 10) {
+		dd = '0' + dd
+	}
+	if (mm < 10) {
+		mm = '0' + mm
+	}
+	today = yyyy + '-' + mm + '-' + dd;
+	document.getElementById("ExpireDate").setAttribute("min", today);
+
 });
 
 // SAVE ============================================
@@ -95,20 +128,29 @@ function onItemDeleteComplete(response, status) {
 }
 
 // UPDATE==========================================
-$(document).on(
-		"click",
-		".btnUpdate",
-		function(event) {
-			$("#hidDrugIDSave").val(
-					$(this).closest("tr").find('#hidDrugIDUpdate').val());
-			$("#drugName").val($(this).closest("tr").find('td:eq(0)').text());
-			$("#quantity").val($(this).closest("tr").find('td:eq(1)').text());
-			$("#strength").val($(this).closest("tr").find('td:eq(2)').text());
-			$("#ExpireDate").val($(this).closest("tr").find('td:eq(3)').text());
-			$("#UnitPrice").val($(this).closest("tr").find('td:eq(4)').text());
-			$("#typeName").val($(this).closest("tr").find('td:eq(5)').text());			
-			$("#categoryName").val($(this).closest("tr").find('td:eq(6)').text());
-		});
+$(document)
+		.on(
+				"click",
+				".btnUpdate",
+				function(event) {
+					$("#hidDrugIDSave").val(
+							$(this).closest("tr").find('#hidDrugIDUpdate')
+									.val());
+					$("#drugName").val(
+							$(this).closest("tr").find('td:eq(0)').text());
+					$("#quantity").val(
+							$(this).closest("tr").find('td:eq(1)').text());
+					$("#strength").val(
+							$(this).closest("tr").find('td:eq(2)').text());
+					$("#ExpireDate").val(
+							$(this).closest("tr").find('td:eq(3)').text());
+					$("#UnitPrice").val(
+							$(this).closest("tr").find('td:eq(4)').text());
+					$("#typeName").val(
+							$(this).closest("tr").find('td:eq(5)').text());
+					$("#categoryName").val(
+							$(this).closest("tr").find('td:eq(6)').text());
+				});
 
 // CLIENTMODEL=========================================================================
 function validateDrugForm() {
@@ -116,7 +158,7 @@ function validateDrugForm() {
 	if ($("#drugName").val().trim() == "") {
 		return "Insert Drug Name.";
 	}
-	
+
 	// Quantity-----------------------------
 	if ($("#quantity").val().trim() == "") {
 		return "Insert Drug Quantity.";
@@ -126,16 +168,18 @@ function validateDrugForm() {
 	if (!$.isNumeric(tmpQuantity)) {
 		return "Insert a numerical value for Drug Quantity.";
 	}
-	
+	// ----------------------------------------
+
 	// Strength
 	if ($("#strength").val().trim() == "") {
 		return "Insert Drug Strength.";
 	}
 	// Expire Date
+	var currentDate = new Date();
 	if ($("#ExpireDate").val().trim() == "") {
 		return "Insert Expire Date.";
-	}	
-	
+	}
+
 	// Unit PRICE-------------------------------
 	if ($("#UnitPrice").val().trim() == "") {
 		return "Insert Unit Price.";
@@ -147,12 +191,13 @@ function validateDrugForm() {
 	}
 	// convert to decimal price
 	$("#UnitPrice").val(parseFloat(tmpPrice).toFixed(2));
-	
+	// -----------------------------------------
+
 	// Type Name
 	if ($("#typeName").val() == "0") {
 		return "Select Type Name.";
 	}
-	
+
 	// Category Name
 	if ($("#categoryName").val() == "0") {
 		return "Select Category Name.";
