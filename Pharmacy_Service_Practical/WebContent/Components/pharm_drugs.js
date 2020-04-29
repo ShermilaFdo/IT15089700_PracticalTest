@@ -154,11 +154,13 @@ $(document)
 
 // CLIENTMODEL=========================================================================
 function validateDrugForm() {
+	////////////
 	// Drug Name
 	if ($("#drugName").val().trim() == "") {
 		return "Insert Drug Name.";
 	}
 
+	////////////
 	// Quantity-----------------------------
 	if ($("#quantity").val().trim() == "") {
 		return "Insert Drug Quantity.";
@@ -170,16 +172,36 @@ function validateDrugForm() {
 	}
 	// ----------------------------------------
 
+	////////////
 	// Strength
 	if ($("#strength").val().trim() == "") {
 		return "Insert Drug Strength.";
 	}
+	
+	////////////
 	// Expire Date
-	var currentDate = new Date();
 	if ($("#ExpireDate").val().trim() == "") {
 		return "Insert Expire Date.";
 	}
+	
+	//Alert - when trying to update with an old expire date
+	var today1 = new Date();
+	var dd = today1.getDate();
+	var mm = today1.getMonth() + 1; // Month count from 0 to 11
+	var yyyy = today1.getFullYear();
+	if (dd < 10) {
+		dd = '0' + dd
+	}
+	if (mm < 10) {
+		mm = '0' + mm
+	}
+	today1 = yyyy + '-' + mm + '-' + dd;
+	
+	if(($("#ExpireDate").val().trim()) < today1) {
+		return "Expire Date is already passed.";
+	}
 
+	////////////
 	// Unit PRICE-------------------------------
 	if ($("#UnitPrice").val().trim() == "") {
 		return "Insert Unit Price.";
@@ -193,11 +215,13 @@ function validateDrugForm() {
 	$("#UnitPrice").val(parseFloat(tmpPrice).toFixed(2));
 	// -----------------------------------------
 
+	////////////
 	// Type Name
 	if ($("#typeName").val() == "0") {
 		return "Select Type Name.";
 	}
-
+	
+	////////////
 	// Category Name
 	if ($("#categoryName").val() == "0") {
 		return "Select Category Name.";
