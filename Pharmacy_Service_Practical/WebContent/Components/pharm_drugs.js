@@ -62,12 +62,12 @@ $(document).on("click", "#btnSave", function(event) {
 		data : $("#formDrug").serialize(),
 		dataType : "text",
 		complete : function(response, status) {
-			onItemSaveComplete(response.responseText, status);
+			onDrugSaveComplete(response.responseText, status);
 		}
 	});
 });
 
-function onItemSaveComplete(response, status) {
+function onDrugSaveComplete(response, status) {
 	if (status == "success") {
 		var resultSet = JSON.parse(response);
 
@@ -100,12 +100,12 @@ $(document).on("click", ".btnRemove", function(event) {
 		data : "drugID=" + $(this).data("drugid"),
 		dataType : "text",
 		complete : function(response, status) {
-			onItemDeleteComplete(response.responseText, status);
+			onDrugDeleteComplete(response.responseText, status);
 		}
 	});
 });
 
-function onItemDeleteComplete(response, status) {
+function onDrugDeleteComplete(response, status) {
 	if (status == "success") {
 		var resultSet = JSON.parse(response);
 

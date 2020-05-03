@@ -1,0 +1,29 @@
+@charset "ISO-8859-1";
+
+div#heading {
+	padding: 15px;
+	text-align: center;
+	background: #f0f5f5;
+}
+
+div#fieldMargin {
+	margin: 10px;
+}
+
+div#leftdiv {
+	width: 50%;
+	float: left;
+}
+
+div#rightdiv {
+	width: 50%;
+	float: right;
+}
+
+div#normaldiv {
+	margin: 10px;
+}
+
+th {
+	background: #f0f5f5;
+}

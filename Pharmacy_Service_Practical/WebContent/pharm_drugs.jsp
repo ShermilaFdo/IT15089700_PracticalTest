@@ -9,39 +9,14 @@
 <head>
 <meta charset="ISO-8859-1">
 
-<style>
-div#heading {
-	padding: 15px;
-	text-align: center;
-	background: #f0f5f5;
-}
 
-div#fieldMargin {
-	margin: 10px;
-}
-
-div#leftdiv {
-	width: 50%;
-	float: left;
-}
-
-div#rightdiv {
-	width: 50%;
-	float: right;
-}
-
-div#normaldiv {
-	margin: 10px;
-}
-
-th {
-	background: #f0f5f5;
-}
-</style>
 
 <title>Pharmacy Service</title>
 
 <link rel="stylesheet" href="Views/bootstrap.min.css">
+
+<link rel="stylesheet" href="styles.css">
+
 <script src="Components/jquery-3.2.1.min.js"></script>
 <script src="Components/pharm_drugs.js"></script>
 
@@ -90,7 +65,7 @@ th {
 						<div id="leftdiv">
 							<div id="fieldMargin" class="centered">
 								Expire Date: <input id="ExpireDate" name="ExpireDate"
-									type="date" min=" " class="form-control form-control-sm">
+									type="date" min=" " class="form-control form-control-sm" placeholder="YYYY-MM-DD">
 								<br>
 							</div>
 						</div>
