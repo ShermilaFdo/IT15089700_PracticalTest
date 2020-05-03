@@ -14,8 +14,7 @@
 <title>Pharmacy Service</title>
 
 <link rel="stylesheet" href="Views/bootstrap.min.css">
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="Views/styles.css">
 
 <script src="Components/jquery-3.2.1.min.js"></script>
 <script src="Components/pharm_drugs.js"></script>
