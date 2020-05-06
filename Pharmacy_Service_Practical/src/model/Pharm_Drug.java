@@ -30,7 +30,7 @@ public class Pharm_Drug {
 				return "Error while connecting to the database for inserting.";
 			}
 
-			String query = " insert into pharmacy_service_db.drugs(`drugID`, `drugName`,`quantity`,`strength`,`ExpireDate`,`UnitPrice`,`typeName`,`categoryName`)"
+			String query = " insert into `drugs`(`drugID`, `drugName`,`quantity`,`strength`,`ExpireDate`,`UnitPrice`,`typeName`,`categoryName`)"
 					+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
@@ -71,7 +71,7 @@ public class Pharm_Drug {
 
 			output = "<table border='1'><tr><th>Drug Name</th><th>Available Quantity</th><th>Strength</th><th>Expire Date</th><th>Unit Price</th><th>Type Name</th><th>Category Name</th><th>Update</th><th>Remove</th></tr>";
 
-			String query = "select * from drugs order by drugID";
+			String query = "select * from `drugs` order by `drugID`";
 
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
@@ -121,7 +121,7 @@ public class Pharm_Drug {
 				return "Error while connecting to the database for updating.";
 			}
 
-			String query = "UPDATE drugs SET drugName=?,quantity=?,strength=?,ExpireDate=?, UnitPrice=?, typeName=?, categoryName=? WHERE drugID=?";
+			String query = "UPDATE `drugs` SET `drugName`=?,`quantity`=?,`strength`=?,`ExpireDate`=?, `UnitPrice`=?, `typeName`=?, `categoryName`=? WHERE `drugID`=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 			// binding values
@@ -159,7 +159,7 @@ public class Pharm_Drug {
 			}
 
 			// create a prepared statement
-			String query = "delete from drugs where drugID=?";
+			String query = "delete from `drugs` where `drugID`=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 			// binding values

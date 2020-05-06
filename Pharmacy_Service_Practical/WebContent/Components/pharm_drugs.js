@@ -5,8 +5,6 @@ $(document).ready(function() {
 
 	// This helps to show Calendar/datepicker in all browsers.
 	// Because some browsers won't show calendar/datepicker
-	//Even in Eclipse
-	// Also, Format date as YY-MM-DD
 	webshims.setOptions('forms-ext', {
 		types : 'date'
 	});
@@ -22,10 +20,9 @@ $(document).ready(function() {
 	};
 
 	// Expire date should not be an old date.
-	// Therefore only allow from current date to select from calendar	
-	var today=getTodayDate();
+	// Therefore only allow from current date to select from calendar
+	var today = getTodayDate();
 	document.getElementById("ExpireDate").setAttribute("min", today);
-
 });
 
 // SAVE ============================================
@@ -145,46 +142,48 @@ $(document)
 
 // CLIENTMODEL=========================================================================
 function validateDrugForm() {
-	////////////
+	// //////////
 	// Drug Name
 	if ($("#drugName").val().trim() == "") {
 		return "Insert Drug Name.";
 	}
 
-	////////////
+	// //////////
 	// Quantity-----------------------------
 	if ($("#quantity").val().trim() == "") {
 		return "Insert Drug Quantity.";
 	}
-	if ($("#quantity").val().trim() <= 0) {
-		return "Drug Quantity shouldn't be zero or less.";
+	var tmpQuantity = $("#quantity").val().trim();
+	if (tmpQuantity <= 0) {
+		return "Drug Quantity shouldn't  be zero or less.";
 	}
 	// is numerical value
-	var tmpQuantity = $("#quantity").val().trim();
 	if (!$.isNumeric(tmpQuantity)) {
 		return "Insert a numerical value for Drug Quantity.";
 	}
 	// ----------------------------------------
 
-	////////////
+	// //////////
 	// Strength
 	if ($("#strength").val().trim() == "") {
 		return "Insert Drug Strength.";
 	}
-	
-	////////////
-	// Expire Date
+
+	// //////////
+	// Expire Date-------------------------
 	if ($("#ExpireDate").val().trim() == "") {
 		return "Insert Expire Date.";
 	}
-	
-	//Alert - when trying to update with an old expire date
-	var today=getTodayDate();	
-	if(($("#ExpireDate").val().trim()) < today) {
+	// Alert - when trying to update with an old expire date
+	var tmpDate = $("#ExpireDate").val().trim();
+	var checktoday = getTodayDate();
+
+	if (tmpDate < checktoday) {
 		return "Expire Date is already passed.";
 	}
+	// --------------------------------------
 
-	////////////
+	// //////////
 	// Unit PRICE-------------------------------
 	if ($("#UnitPrice").val().trim() == "") {
 		return "Insert Unit Price.";
@@ -198,13 +197,13 @@ function validateDrugForm() {
 	$("#UnitPrice").val(parseFloat(tmpPrice).toFixed(2));
 	// -----------------------------------------
 
-	////////////
+	// //////////
 	// Type Name
 	if ($("#typeName").val() == "0") {
 		return "Select Type Name.";
 	}
-	
-	////////////
+
+	// //////////
 	// Category Name
 	if ($("#categoryName").val() == "0") {
 		return "Select Category Name.";
@@ -212,7 +211,7 @@ function validateDrugForm() {
 	return true;
 }
 
-function getTodayDate(){
+function getTodayDate() {
 	var today = new Date();
 	var dd = today.getDate();
 	var mm = today.getMonth() + 1; // Month count starts from 0 to 11
@@ -223,5 +222,5 @@ function getTodayDate(){
 	if (mm < 10) {
 		mm = '0' + mm
 	}
-	return today = yyyy + '-' + mm + '-' + dd;	
+	return today = yyyy + '-' + mm + '-' + dd;
 }
