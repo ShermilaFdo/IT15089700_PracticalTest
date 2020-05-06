@@ -5,6 +5,7 @@ $(document).ready(function() {
 
 	// This helps to show Calendar/datepicker in all browsers.
 	// Because some browsers won't show calendar/datepicker
+	//Even in Eclipse
 	// Also, Format date as YY-MM-DD
 	webshims.setOptions('forms-ext', {
 		types : 'date'
@@ -21,18 +22,8 @@ $(document).ready(function() {
 	};
 
 	// Expire date should not be an old date.
-	// Therefore only allow from current date to select from calendar
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth() + 1; // Month count from 0 to 11
-	var yyyy = today.getFullYear();
-	if (dd < 10) {
-		dd = '0' + dd
-	}
-	if (mm < 10) {
-		mm = '0' + mm
-	}
-	today = yyyy + '-' + mm + '-' + dd;
+	// Therefore only allow from current date to select from calendar	
+	var today=getTodayDate();
 	document.getElementById("ExpireDate").setAttribute("min", today);
 
 });
@@ -165,6 +156,9 @@ function validateDrugForm() {
 	if ($("#quantity").val().trim() == "") {
 		return "Insert Drug Quantity.";
 	}
+	if ($("#quantity").val().trim() <= 0) {
+		return "Drug Quantity shouldn't be zero or less.";
+	}
 	// is numerical value
 	var tmpQuantity = $("#quantity").val().trim();
 	if (!$.isNumeric(tmpQuantity)) {
@@ -185,19 +179,8 @@ function validateDrugForm() {
 	}
 	
 	//Alert - when trying to update with an old expire date
-	var today1 = new Date();
-	var dd = today1.getDate();
-	var mm = today1.getMonth() + 1; // Month count from 0 to 11
-	var yyyy = today1.getFullYear();
-	if (dd < 10) {
-		dd = '0' + dd
-	}
-	if (mm < 10) {
-		mm = '0' + mm
-	}
-	today1 = yyyy + '-' + mm + '-' + dd;
-	
-	if(($("#ExpireDate").val().trim()) < today1) {
+	var today=getTodayDate();	
+	if(($("#ExpireDate").val().trim()) < today) {
 		return "Expire Date is already passed.";
 	}
 
@@ -227,4 +210,18 @@ function validateDrugForm() {
 		return "Select Category Name.";
 	}
 	return true;
+}
+
+function getTodayDate(){
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth() + 1; // Month count starts from 0 to 11
+	var yyyy = today.getFullYear();
+	if (dd < 10) {
+		dd = '0' + dd
+	}
+	if (mm < 10) {
+		mm = '0' + mm
+	}
+	return today = yyyy + '-' + mm + '-' + dd;	
 }
